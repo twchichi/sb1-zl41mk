@@ -1,125 +1,68 @@
-import React, { useState } from 'react';
-import { Contact } from '../types';
-import { UserPlus } from 'lucide-react';
+import React, { useState } from "react";
+import { Contact } from "../types";
 
+// 定義 ContactForm 組件的屬性
 interface ContactFormProps {
   onAddContact: (contact: Contact) => void;
 }
 
+// 定義 ContactForm 組件
 const ContactForm: React.FC<ContactFormProps> = ({ onAddContact }) => {
-  const [contact, setContact] = useState<Contact>({
-    id: '',
-    name: '',
-    company: '',
-    title: '',
-    address: '',
-    phone: '',
-    mobile: '',
-    email: ''
-  });
+  // 使用 useState 鉤子來管理表單字段的狀態
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setContact(prev => ({ ...prev, [name]: value }));
-  };
-
+  // 處理表單提交的函數
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAddContact({ ...contact, id: Date.now().toString() });
-    setContact({
-      id: '',
-      name: '',
-      company: '',
-      title: '',
-      address: '',
-      phone: '',
-      mobile: '',
-      email: ''
-    });
+    // 創建新的聯絡人對象
+    const newContact: Contact = { name, email, phone };
+    // 調用父組件傳遞的 onAddContact 函數
+    onAddContact(newContact);
+    // 重置表單字段
+    setName("");
+    setEmail("");
+    setPhone("");
   };
 
+  // 渲染 ContactForm 組件
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-      <div className="mb-4">
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="text"
-          name="name"
-          value={contact.name}
-          onChange={handleChange}
-          placeholder="姓名"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="text"
-          name="company"
-          value={contact.company}
-          onChange={handleChange}
-          placeholder="公司"
-        />
-      </div>
-      <div className="mb-4">
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="text"
-          name="title"
-          value={contact.title}
-          onChange={handleChange}
-          placeholder="職稱"
-        />
-      </div>
-      <div className="mb-4">
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="text"
-          name="address"
-          value={contact.address}
-          onChange={handleChange}
-          placeholder="住址"
-        />
-      </div>
-      <div className="mb-4">
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="tel"
-          name="phone"
-          value={contact.phone}
-          onChange={handleChange}
-          placeholder="電話"
-        />
-      </div>
-      <div className="mb-4">
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="tel"
-          name="mobile"
-          value={contact.mobile}
-          onChange={handleChange}
-          placeholder="手機"
-        />
-      </div>
-      <div className="mb-4">
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="email"
-          name="email"
-          value={contact.email}
-          onChange={handleChange}
-          placeholder="Email"
-        />
-      </div>
-      <div className="flex items-center justify-between">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center"
-          type="submit"
-        >
-          <UserPlus size={18} className="mr-2" />
-          新增聯絡人
-        </button>
-      </div>
+    <form onSubmit={handleSubmit} className="mb-4">
+      {/* 姓名輸入框 */}
+      <input
+        type="text"
+        placeholder="姓名"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+        className="w-full p-2 mb-2 border rounded"
+      />
+      {/* 郵箱輸入框 */}
+      <input
+        type="email"
+        placeholder="郵箱"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        className="w-full p-2 mb-2 border rounded"
+      />
+      {/* 電話輸入框 */}
+      <input
+        type="tel"
+        placeholder="電話"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        required
+        className="w-full p-2 mb-2 border rounded"
+      />
+      {/* 提交按鈕 */}
+      <button
+        type="submit"
+        className="w-full p-2 bg-blue-500 text-white rounded"
+      >
+        添加聯絡人
+      </button>
     </form>
   );
 };
